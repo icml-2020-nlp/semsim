@@ -7,10 +7,9 @@ Under review.
 
 <br>This repository provides pre-processed dataset, source code, and pre-trained weights used for our experiment.
 
-### The code, pre-trained weight and full documentation will be released soon (within a few days).
+### Full documentation will be released soon (within a few days).
 
 ![Our model](model.jpg)
-
 
 ## Folder description
 ```
@@ -23,16 +22,16 @@ Under review.
 *  `/fairseq-semsim` : The codes for our model. Modified from [fairseq (v 0.8.0 : 534905)](https://github.com/pytorch/fairseq/tree/5349052aae4ec1350822c894fbb6be350dff61a0) and [Rewarder](https://github.com/yg211/summary-reward-no-reference) repositories.
 *  `/datasets` (upcoming) : Our version of the pre-processed CNN/DM dataset and the pre-processing code. Modified from [PGN by See et al.](https://github.com/abisee/cnn-dailymail) following instructions of [BART (issue #1391)](https://github.com/pytorch/fairseq/issues/1391)
 
+
 ## Requirements and Installation
-### For pre-processing the dataset
-TBA
+### For preparing (pre-processing) the CNN/DM dataset
+Please check README inside [datasets](./datasets) folder.
 
 ### For fine-tuning and inferencing 
-* You can download our pre-trained weight from [here]() (will be released soon (within a few days))
 * PyTorch version >= 1.2.0
 * Python version >= 3.6
 * fairseq == 0.8.0
-* pytorch_transformers
+* pytorch_transformers == 1.2.0
 
 Also you need to install fairseq from the source
 ```
@@ -40,9 +39,20 @@ cd fairseq-semsim
 pip install --editable .
 ```
 
+For inferencing, our pre-trained weight is also available  [here](https://drive.google.com/open?id=1CNgK6ZkaqUD239h_6GkLmfUOGgryc2v9).
+
+|    Name   |                  SHA1SUM                 |
+|:---------:|:----------------------------------------:|
+| semsim.pt | d7ba2c2e06201e373a5e53cffe40d153ee867cc4 | 
+
+
+
 ## Fine-tuning the model
-If you wish to fine-tune the model with [BART checkpoint](https://github.com/pytorch/fairseq/tree/master/examples/bart), please first follow the instructions from `/fairseq-semsim` and use the following command.
-Please execute the command from the `/fairseq-semsim` folder.
+If you wish to fine-tune the model from [BART checkpoint](https://github.com/pytorch/fairseq/tree/master/examples/bart), please download the checkpoint `bart.large.cnn`.
+
+<br>Use the following command to fine-tune `bart.large.cnn` with SemSim strategy.
+<br>Please execute the command from the `/fairseq-semsim` folder.
+<br>(For details, check the instructions from [`/fairseq-semsim`](./fairseq-semsim) and [`Fine-tuning BART`](./fairseq-semsim/examples/bart/README.cnn.md) file.)
 ```
 BART_PATH=/pretrained/BART/bart.large.cnn/model.pt 
 
@@ -79,16 +89,16 @@ We followed most of default settings of BART. However, we removed a few options 
 We used one NVIDIA TITAN RTX GPU with 24GB memory and it took 7~9 hours for a single epoch. 
 
 
-## Inference for CNN/DM data
-Please also check [BART repository](https://github.com/pytorch/fairseq/blob/master/examples/bart/README.cnn.md) for details.
+## Inferencing
 Please execute the following python script from the `/fairseq-semsim` folder.
+<br>(Please also check instructions from [BART repository](./fairseq-semsim/examples/bart#evaluating-the-bartlargecnn-model) for details.)
 ```
 import torch
 from fairseq.models.bart import BARTModel
 
 bart = BARTModel.from_pretrained(
     'checkpoints/',
-    checkpoint_file='checkpoint_best.pt',
+    checkpoint_file='semsim.pt',
     data_name_or_path='cnn_dm-bin'
 )
 
