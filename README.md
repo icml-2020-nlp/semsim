@@ -23,7 +23,7 @@ Under review.
    
 *  `/fairseq-semsim` : The codes for our model. Modified from [fairseq (v 0.8.0 : 534905)](https://github.com/pytorch/fairseq/tree/5349052aae4ec1350822c894fbb6be350dff61a0) and [Rewarder](https://github.com/yg211/summary-reward-no-reference) repositories.
 *  `/datasets`  : Our version of the pre-processed CNN/DM dataset and the pre-processing code. Modified from [PGN by See et al.](https://github.com/abisee/cnn-dailymail) following instructions of [BART (issue #1391)](https://github.com/pytorch/fairseq/issues/1391)
-*  `/results` : Generated summaries of BART, SemSim and reference summaries (not tokenized). We provide summarization results for the CNN/DM dataset and the reduced dataset (n=1000). 
+*  `/results` : We provide summarization results for the CNN/DM dataset and the reduced dataset (n=1000). Folder contains generated summaries of BART and SemSim and reference summaries (not tokenized).
 
 ## Requirements and Installation
 ### For preparing (pre-processing) the CNN/DM dataset
