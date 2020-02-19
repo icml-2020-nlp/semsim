@@ -7,9 +7,10 @@ Under review.
 
 <br>This repository provides pre-processed dataset, source code, and pre-trained weights used for our experiment.
 
+<!--
 ### Full documentation will be released soon (within a few days).
-
 ![Our model](model.jpg)
+!-->
 
 ## Folder description
 ```
@@ -39,7 +40,7 @@ cd fairseq-semsim
 pip install --editable .
 ```
 
-For inferencing, our pre-trained weight is also available  [here](https://drive.google.com/open?id=1CNgK6ZkaqUD239h_6GkLmfUOGgryc2v9).
+We also provides our pre-trained weights for fast evauation of our model : [Download](https://drive.google.com/open?id=1CNgK6ZkaqUD239h_6GkLmfUOGgryc2v9).
 
 |    Name   |                  SHA1SUM                 |
 |:---------:|:----------------------------------------:|
