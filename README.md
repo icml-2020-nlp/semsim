@@ -2,7 +2,7 @@
 
 
 Under review.
-<br>Please be noticed that the Git log was intentionally omitted to keep the review process Double-Blind.
+<br>Please be noticed that the majority of Git logs were intentionally omitted to keep the review process Double-Blind.
 <br>We will redirect or update this repository after we receive the final decisions.
 
 <br>This repository provides pre-processed dataset, source code, and pre-trained weights used for our experiment.
@@ -48,11 +48,54 @@ For inferencing, our pre-trained weight is also available  [here](https://drive.
 
 
 ## Fine-tuning the model
-If you wish to fine-tune the model from [BART checkpoint](https://github.com/pytorch/fairseq/tree/master/examples/bart), please download the checkpoint `bart.large.cnn`.
 
-<br>Use the following command to fine-tune `bart.large.cnn` with SemSim strategy.
-<br>Please execute the command from the `/fairseq-semsim` folder.
-<br>(For details, check the instructions from [`/fairseq-semsim`](./fairseq-semsim) and [`Fine-tuning BART`](./fairseq-semsim/examples/bart/README.cnn.md) file.)
+If you wish to fine-tune SemSim model your own from [BART checkpoint](https://github.com/pytorch/fairseq/tree/master/examples/bart), please download the checkpoint `bart.large.cnn`.
+
+Our example code and instructions are copied and modfied from [fairseq](https://github.com/pytorch/fairseq/tree/5349052aae4ec1350822c894fbb6be350dff61a0).
+### 1) Get data-files from [here](./datasets) and move files to `/fairseq-semsim/cnn_dm` folder.
+
+### 2) BPE preprocess:
+<b>Please make sure that you are executing the commands from the `/fairseq-semsim` folder.</b>
+```
+cd fairseq-semsim
+```
+
+```bash
+wget -N 'https://dl.fbaipublicfiles.com/fairseq/gpt2_bpe/encoder.json'
+wget -N 'https://dl.fbaipublicfiles.com/fairseq/gpt2_bpe/vocab.bpe'
+wget -N 'https://dl.fbaipublicfiles.com/fairseq/gpt2_bpe/dict.txt'
+
+for SPLIT in train val
+do
+  for LANG in source target
+  do
+    python -m examples.roberta.multiprocessing_bpe_encoder \
+    --encoder-json encoder.json \
+    --vocab-bpe vocab.bpe \
+    --inputs "cnn_dm/$SPLIT.$LANG" \
+    --outputs "cnn_dm/$SPLIT.bpe.$LANG" \
+    --workers 60 \
+    --keep-empty;
+  done
+done
+```
+
+### 3) Binarize dataset:
+```bash
+fairseq-preprocess \
+  --source-lang "source" \
+  --target-lang "target" \
+  --trainpref "cnn_dm/train.bpe" \
+  --validpref "cnn_dm/val.bpe" \
+  --destdir "cnn_dm-bin/" \
+  --workers 60 \
+  --srcdict dict.txt \
+  --tgtdict dict.txt;
+```
+
+### 4) Fine-tuning `bart.large.cnn` with SemSim approach on CNN-DM summarization task:
+
+Use the following command to fine-tune `bart.large.cnn` with SemSim strategy.
 ```
 BART_PATH=/pretrained/BART/bart.large.cnn/model.pt 
 
@@ -86,11 +129,18 @@ python train.py cnn_dm-bin \
     --find-unused-parameters;
 ```
 We followed most of default settings of BART. However, we removed a few options such as `--truncate-source` and `--fp16 `.
-We used one NVIDIA TITAN RTX GPU with 24GB memory and it took 7~9 hours for a single epoch. 
+We used one NVIDIA TITAN RTX GPU with 24GB memory and it took 7~9 hours for a single epoch. We achieved best performace at epoch 6. 
+
+For details, check the instructions from [`/fairseq-semsim`](./fairseq-semsim) and [`Fine-tuning BART`](./fairseq-semsim/examples/bart/README.cnn.md) file.
 
 
-## Inferencing
-Please execute the following python script from the `/fairseq-semsim` folder.
+## Evaluating the model (Inferencing)
+<b>Please make sure that you are executing following python script from the `/fairseq-semsim` folder.</b>
+```
+cd fairseq-semsim
+```
+
+Run following python script to generate summaries.
 <br>(Please also check instructions from [BART repository](./fairseq-semsim/examples/bart#evaluating-the-bartlargecnn-model) for details.)
 ```
 import torch
@@ -128,3 +178,17 @@ with open('cnn_dm/test.source') as source, open('cnn_dm/test.hypo', 'w') as fout
             fout.write(hypothesis + '\n')
             fout.flush()
 ```
+
+Install `files2rouge` from [here](https://github.com/pltrdy/files2rouge).
+
+```bash
+export CLASSPATH=/path/to/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0.jar
+
+# Tokenize hypothesis and target files.
+cat test.hypo | java edu.stanford.nlp.process.PTBTokenizer -ioFileList -preserveLines > test.hypo.tokenized
+cat test.target | java edu.stanford.nlp.process.PTBTokenizer -ioFileList -preserveLines > test.hypo.target
+files2rouge test.hypo.tokenized test.hypo.target
+# Expected output: (ROUGE-L Average_F: 0.4153)
+```
+You will need java library to run CoreNLP. 
+
