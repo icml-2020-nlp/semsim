@@ -16,13 +16,14 @@ Under review.
 ```
 /--|fairseq-semsim/
    |datasets/
+   |results/
    |README.md
    |model.jpg
 ```
    
 *  `/fairseq-semsim` : The codes for our model. Modified from [fairseq (v 0.8.0 : 534905)](https://github.com/pytorch/fairseq/tree/5349052aae4ec1350822c894fbb6be350dff61a0) and [Rewarder](https://github.com/yg211/summary-reward-no-reference) repositories.
 *  `/datasets`  : Our version of the pre-processed CNN/DM dataset and the pre-processing code. Modified from [PGN by See et al.](https://github.com/abisee/cnn-dailymail) following instructions of [BART (issue #1391)](https://github.com/pytorch/fairseq/issues/1391)
-
+*  `/results` : Generated summaries of BART, SemSim and reference summaries (not tokenized). We provide summarization results for the CNN/DM dataset and the reduced dataset (n=1000). 
 
 ## Requirements and Installation
 ### For preparing (pre-processing) the CNN/DM dataset
@@ -100,7 +101,6 @@ Use the following command to fine-tune `bart.large.cnn` with SemSim strategy.
 ```
 BART_PATH=/pretrained/BART/bart.large.cnn/model.pt 
 
-
 TOTAL_NUM_UPDATES=50000  
 WARMUP_UPDATES=500      
 LR=3e-05
@@ -129,7 +129,8 @@ python train.py cnn_dm-bin \
     --save-dir checkpoints/semsim \
     --find-unused-parameters;
 ```
-We followed most of default settings of BART. However, we removed a few options such as `--truncate-source` and `--fp16 `.
+We followed most of default settings of BART. However, we removed a few options such as `--truncate-source` and `--fp16 `. 
+`MAX_TOKENS` was changed to 1792.
 We used one NVIDIA TITAN RTX GPU with 24GB memory and it took 7~9 hours for a single epoch. We achieved best performace at epoch 6. 
 
 For details, check the instructions from [`/fairseq-semsim`](./fairseq-semsim) and [`Fine-tuning BART`](./fairseq-semsim/examples/bart/README.cnn.md) file.
