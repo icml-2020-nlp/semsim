@@ -2,8 +2,7 @@
 This folder provides the non-anonymized version of the CNN / Daily Mail summarization dataset for BART and the code to produce the dataset.
 The dataset and codes are modified from [here](https://github.com/abisee/cnn-dailymail).
 
-**Python 3 version**: This code is in Python 2. If you want a Python 3 version, see [@artmatsak's fork](https://github.com/artmatsak/cnn-dailymail). However, this will not produce the exact dataset we used for the experiment. 
-<br>We recommend downloading the dataset from Option 1.
+**Python 3 version**: This code is in Python 2. If you want a Python 3 version, see [@artmatsak's fork](https://github.com/artmatsak/cnn-dailymail). However, this will not produce the exact dataset we used for the experiment. In this case, we recommend downloading the dataset (Option 1).
 
 # Option 1: download the processed data
 
