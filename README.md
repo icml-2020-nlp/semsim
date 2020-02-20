@@ -30,7 +30,7 @@ Under review.
 Please check README inside [datasets](./datasets) folder.
 
 ### For fine-tuning and inferencing 
-* PyTorch version >= 1.2.0
+* PyTorch version >= 1.2.0 (CUDA available version)
 * Python version >= 3.6
 * fairseq == 0.8.0
 * pytorch_transformers == 1.2.0
