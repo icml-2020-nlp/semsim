@@ -94,7 +94,7 @@ fairseq-preprocess \
 ### 4) Fine-tuning `bart.large.cnn` with SemSim approach on CNN-DM summarization task:
 
 Use the following command to fine-tune `bart.large.cnn` with SemSim strategy.
-```
+```bash
 BART_PATH=/pretrained/BART/bart.large.cnn/model.pt 
 
 TOTAL_NUM_UPDATES=50000  
@@ -126,8 +126,10 @@ python train.py cnn_dm-bin \
     --find-unused-parameters;
 ```
 We followed most of default settings of BART. However, we removed a few options such as `--truncate-source` and `--fp16 `. 
-`MAX_TOKENS` was changed to 1792.
-We used one NVIDIA TITAN RTX GPU with 24GB memory and it took 7~9 hours for a single epoch. We achieved best performace at epoch 6. 
+`MAX_TOKENS` was changed to 1792 to fit our GPU memory.
+
+We used one <b>NVIDIA TITAN RTX GPU with 24GB memory</b> and it took 7~9 hours for a single epoch. We achieved best performace at epoch 6. 
+<br>We believe 24GB GPU memory is a mimimum requirement for fine-tuning. Our test on 12GB GPU memory was faild. We managed to train the model on 16GB memory with `MAX_TOKENS=1024` but we haven't tested the result. Our code do not support multi-GPU setting yet. 
 
 For details, check the instructions from [`/fairseq-semsim`](./fairseq-semsim) and [`Fine-tuning BART`](./fairseq-semsim/examples/bart/README.cnn.md) file.
 
@@ -140,7 +142,7 @@ cd fairseq-semsim
 
 Run following python script to generate summaries.
 <br>(Please also check instructions from [BART repository](./fairseq-semsim/examples/bart#evaluating-the-bartlargecnn-model) for details.)
-```
+```python
 import torch
 from fairseq.models.bart import BARTModel
 
@@ -154,7 +156,7 @@ bart.cuda()
 bart.eval()
 bart.half()
 count = 1
-bsz = 32
+bsz = 32 # for 12GB GPU memory
 with open('cnn_dm/test.source') as source, open('cnn_dm/test.hypo', 'w') as fout:
     sline = source.readline().strip()
     slines = [sline]
@@ -176,6 +178,7 @@ with open('cnn_dm/test.source') as source, open('cnn_dm/test.hypo', 'w') as fout
             fout.write(hypothesis + '\n')
             fout.flush()
 ```
+Please adjust `bsz` for faster inferencing. (`bsz=32` works well on 12GB GPU memory)
 
 Install `files2rouge` from [here](https://github.com/pltrdy/files2rouge).
 
@@ -188,5 +191,5 @@ cat test.target | java edu.stanford.nlp.process.PTBTokenizer -ioFileList -preser
 files2rouge test.hypo.tokenized test.hypo.target
 # Expected output: (ROUGE-L Average_F: 0.4153)
 ```
-You will need java library to run CoreNLP. 
+You need java and [CoreNLP](https://stanfordnlp.github.io/CoreNLP/) library to run the code. 
 
