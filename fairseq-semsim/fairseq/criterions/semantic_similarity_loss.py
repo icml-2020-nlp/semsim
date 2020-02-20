@@ -115,7 +115,7 @@ class SemanticSimilarityCriterion(FairseqCriterion):
         debug = False
         self.debugCount += 1
         if self.debugCount % 500 == 1:
-            debug = True
+            debug = False
 
         lprobs = model.get_normalized_probs(net_output, log_probs=True)
         lprobs = lprobs.view(-1, lprobs.size(-1))
