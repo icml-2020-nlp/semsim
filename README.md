@@ -30,11 +30,12 @@ Under review.
 ### For preparing (pre-processing) the CNN/DM dataset
 Please check README inside [datasets](./datasets) folder.
 
-### For fine-tuning and inferencing 
+### For fine-tuning and inferencing <b>
 * PyTorch version >= 1.2.0 (CUDA available version)
 * Python version >= 3.6
 * fairseq == 0.8.0
 * pytorch_transformers == 1.2.0
+</b>
 
 Also you need to install fairseq from the source
 ```
@@ -58,7 +59,8 @@ Our example code and instructions are copied and modfied from [fairseq](https://
 ### 1) Get data-files from [here](./datasets) and move files to `/fairseq-semsim/cnn_dm` folder.
 
 ### 2) BPE preprocess:
-<b>Please make sure that you are executing the commands from the `/fairseq-semsim` folder.</b>
+<b>Please make sure that you are executing the shell commands (bash) from the `/fairseq-semsim` folder.</b>
+
 ```
 cd fairseq-semsim
 ```
@@ -136,7 +138,8 @@ For details, check the instructions from [`/fairseq-semsim`](./fairseq-semsim) a
 
 
 ## Evaluating the model (Inferencing)
-<b>Please make sure that you are executing following python script from the `/fairseq-semsim` folder.</b>
+<b>Our code requires binarized dataset to evauate the model (or use it in the inferencing mode). Please follow [2) BPE preprocess and 3) Binarize dataset](https://github.com/icml-2020-nlp/semsim#2-bpe-preprocess) just as when you finetune the model.
+<br>Please make sure that you are executing following python script from the `/fairseq-semsim` folder.</b>
 ```
 cd fairseq-semsim
 ```
