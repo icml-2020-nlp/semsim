@@ -1,7 +1,15 @@
 # Learning by Semantic Similarity Makes Abstractive Summarization Better
 
+Dear visitors, 
+<br>We have checked the code and found out that there is a mistake in the code. We suspect that this issue is caused while we organize our code before the public release. 
 
-Under review.
+We are currently checking further details on the issue. The examination will take about a couple of weeks as the code and the code history are not available in the current workplace at the moment. 
+
+Considering this situation, we decide to post a notice on the repository to discourage usage until we double-check and update the code.
+
+<b>Please refrain from using the model and scores until further notice.</b>
+
+<hr>
 <br>Please be noticed that the majority of Git logs were intentionally omitted to keep the review process Double-Blind.
 <br>We will redirect or update this repository after we receive the final decisions.
 
